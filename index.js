@@ -19,6 +19,42 @@ app.get('/documentation', (req, res) => {
     serveStatic(res, 'documentation.html')
 })
 
+app.get('/movies', (req, res) => {
+    res.send('Successful GET, all movies')
+})
+
+app.get('/movie', (req, res) => {
+    res.send('Successful GET, one movie')
+})
+
+app.get('/genre', (req, res) => {
+    res.send('Successful GET, genre')
+})
+
+app.get('/director', (req, res) => {
+    res.send('Successful GET, director')
+})
+
+app.post('/user', (req, res) => {
+    res.send('Successful POST, signed up new user')
+})
+
+app.put('/user', (req, res) => {
+    res.send('Successful PUT, changed username')
+})
+
+app.post('/favorite', (req, res) => {
+    res.send('Successful POST, added new favorite')
+})
+
+app.delete('/favorite', (req, res) => {
+    res.send('Successful DELETE, deleted favorite')
+})
+
+app.delete('/user', (req, res) => {
+    res.send('Successful DELETE, deleted user')
+})
+
 app.get('*', (req, res) => {
     res.send('File not found')
 })
