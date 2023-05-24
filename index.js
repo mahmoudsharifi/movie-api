@@ -1,6 +1,9 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
+const passport = require('passport')
+const loginRouter = require('./auth.js')
+let auth = require('./auth.js')(app)
 
 const morgan = require('morgan')
 
@@ -14,6 +17,9 @@ app.use(express.static('public'))
 app.use(morgan('common'))
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+
+app.use(passport.authenticate('jwt', { session: false })) 
+
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
