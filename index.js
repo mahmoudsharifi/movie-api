@@ -50,12 +50,14 @@ app.get('/documentation', (req, res) => {
 })
 
 app.get('/movies', async (req, res) => {
+
     let movies = await Movie.find()
     res.json(movies)
 })
 
 app.get('/movie', async (req, res) => {
     let movie = await Movie.findOne({ Title: req.query.title })
+
     res.json(movie)
 })
 
