@@ -33,8 +33,6 @@ app.use(morgan('common'))
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-// app.use(passport.authenticate('jwt', { session: false }))
-
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
@@ -49,31 +47,41 @@ app.get('/documentation', (req, res) => {
     serveStatic(res, 'documentation.html')
 })
 
-app.get('/movies', async (req, res) => {
+app.get('/movies', 
+    passport.authenticate('jwt', { session: false }),
+    async (req, res) => {
 
     let movies = await Movie.find()
     res.json(movies)
 })
 
-app.get('/movie', async (req, res) => {
+app.get('/movie', 
+    passport.authenticate('jwt', { session: false }),
+    async (req, res) => {
     let movie = await Movie.findOne({ Title: req.query.title })
 
     res.json(movie)
 })
 
-app.get('/genre', async (req, res) => {
+app.get('/genre', 
+    passport.authenticate('jwt', { session: false }),
+    async (req, res) => {
     let movie = await Movie.findOne({ "Genre.Name": req.query.name })
     let genre = await movie.Genre
     res.json(genre)
 })
 
-app.get('/director', async (req, res) => {
+app.get('/director', 
+    passport.authenticate('jwt', { session: false }),
+    async (req, res) => {
     let movie = await Movie.findOne({ "Director.Name": req.query.name })
     let director = await movie.Director
     res.json(director)
 })
 
 app.post('/user',
+    
+    passport.authenticate('jwt', { session: false }),
     check('username', 'Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
     check('username', 'Username must be at least 3 characters long').isLength({min: 3}),
     check('email', 'Email does not appear to be valid').isEmail(),
@@ -99,7 +107,9 @@ app.post('/user',
     res.json(users)
 })
 
-app.put('/user', async (req, res) => {
+app.put('/user', 
+    passport.authenticate('jwt', { session: false }),
+    async (req, res) => {
     let { oldUsername, newUsername, password } = req.body
     if (!oldUsername || !password || !newUsername) res.status(400).send('Missing field').end()
     await User.updateOne({ username: oldUsername, password }, {
@@ -111,7 +121,9 @@ app.put('/user', async (req, res) => {
     res.json(users)
 })
 
-app.post('/favorite', async (req, res) => {
+app.post('/favorite', 
+    passport.authenticate('jwt', { session: false }),
+    async (req, res) => {
     let { username, password, newFavorite } = req.body
     if (!username || !password || !newFavorite) res.status(400).send('Missing field').end()
     await User.updateOne({ username, password }, {
@@ -123,7 +135,9 @@ app.post('/favorite', async (req, res) => {
     res.json(users)
 })
 
-app.delete('/favorite', async (req, res) => {
+app.delete('/favorite', 
+    passport.authenticate('jwt', { session: false }),
+    async (req, res) => {
     let { username, password, deleteFavorite } = req.body
     if (!username || !password || !deleteFavorite) res.status(400).send('Missing field').end()
     let user = await User.findOne({ username, password })
@@ -137,7 +151,9 @@ app.delete('/favorite', async (req, res) => {
     res.json(users)
 })
 
-app.delete('/user', async (req, res) => {
+app.delete('/user', 
+    passport.authenticate('jwt', { session: false }),
+    async (req, res) => {
     let { username, password } = req.body
     if (!username || !password) res.status(400).send('Missing field').end()
     await User.findOneAndDelete({ username, password })
