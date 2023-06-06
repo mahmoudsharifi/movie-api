@@ -32,6 +32,6 @@ function updateLog(str) {
     })
 }
 
-server.listen(8080);
+server.listen(8080 )    
 
 // node --watch server.js
